@@ -251,7 +251,7 @@ func (e *Engine) HandlerRoute(c *Context) {
 	reqMethod := c.Method
 	reqURL := c.URL.Path
 	if reqURL[len(reqURL)-1] == '/' && len(reqURL) > 1 {
-		reqURL = reqURL[:len(reqURL)-2]
+		reqURL = reqURL[:len(reqURL)-1]
 	}
 
 	h := HandlerFunc(func(c *Context) error {
