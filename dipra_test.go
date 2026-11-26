@@ -185,3 +185,18 @@ func Test404(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, rec.Code)
 	assert.Equal(t, rec.Body.String(), "{\"error\":{\"code\":404,\"message\":\"Not Found\"}}")
 }
+
+// TestTrailingSlash checks that a trailing slash is dropped, not the last character of the path.
+func TestTrailingSlash(t *testing.T) {
+	e := Default()
+	e.GET("/users", func(c *Context) error {
+		return c.String(http.StatusOK, "users")
+	})
+
+	request := httptest.NewRequest(http.MethodGet, "/users/", nil)
+	res := httptest.NewRecorder()
+	e.ServeHTTP(res, request)
+
+	assert.Equal(t, http.StatusOK, res.Code)
+	assert.Equal(t, "users", res.Body.String())
+}
